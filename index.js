@@ -18,7 +18,7 @@ const mongoose = require('mongoose');
 
 // controllers:
 const pagClienteController = require('./controllers/pagCliente');
-// const pagAdminController = require ('./controllers/pagAdmin');
+const pagAdminController = require ('./controllers/pagAdmin');
 
 const app = express();
 
@@ -33,7 +33,7 @@ let server = app.listen(3012, () => {
 });
 
 app.use ('/pagCliente', pagClienteController);
-//app.use ('/pagAdmin', pagClienteController);
+app.use ('/pagAdmin', pagAdminController);
 
 // rotas abaixo utilizadas para teste:
 

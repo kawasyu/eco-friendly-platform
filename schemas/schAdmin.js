@@ -1,4 +1,5 @@
-const fornecedorSchema = mongoose.model("admin", {
+const mongoose = require('mongoose');
+const adminSchema = mongoose.model("admin", {
    nome:{type: String, required: true},
    email: {type: String, required: true},
    depto: {type: String, required: true},
@@ -8,4 +9,4 @@ const fornecedorSchema = mongoose.model("admin", {
    dataDeCadastro: {type: Date, default: Date.now}
    });
 
-module.exports = fornecedorSchema;
+module.exports = adminSchema;
