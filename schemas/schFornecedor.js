@@ -1,13 +1,13 @@
-const FornecedorSchema = mongoose.model("Fornecedor", {
+const fornecedorSchema = mongoose.model("fornecedor", {
    nomeFantasia:{type: String, required: true},
-   email: {type: Number, required: true},
+   email: {type: String, required: true},
    telefone: {type: String, required: true},
    endereço: {type: String, required: true},
-      site: {type: String, required: true},
+   site: {type: String, required: true},
    responsavel: {type: String, required: true},
    senha: {type: String, required: true},
-   dataDeCadastro: {type: new Date, required: true}
+   dataDeCadastro: {type: Date, default: Date.now}
 
    });
 
-module.exports = FornecedorSchema;
+module.exports = fornecedorSchema;

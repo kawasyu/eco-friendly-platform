@@ -1,60 +1,53 @@
+// dependências do projeto usadas na /index:
 const express = require('express');
-//const handlebars = require ('express-handlebars');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-//const passwordHash = require('password-hash');
-//const jwt = require('jsonwebtoken');
-//const expressJwt = require('express-jwt');
-const ClienteSchema = require('./schemas/cliente');
-
-const app = express();
-app.use(bodyParser.json());
+//const handlebars = require ('express-handlebars');
 //app.engine('handlebars', handlebars({defaultLayout: 'main'}));
 //app.set('view engine', 'handlebars');
 
+// dependências do projeto usadas nas outras rotas:
+//const passwordHash = require('password-hash');
+//const jwt = require('jsonwebtoken');
+//const expressJwt = require('express-jwt');
+
+// schemas (usados nos controllers):
+// const ClienteSchema = require('./schemas/schCliente');
+// const ClienteSchema = require('./schemas/schFornecedor');
+// const ClienteSchema = require('./schemas/schAdmin');
+
+// controllers:
+const pagClienteController = require('./controllers/pagCliente');
+// const pagAdminController = require ('./controllers/pagAdmin');
+
+const app = express();
+
+app.use(bodyParser.json());
+
 mongoose.connect('mongodb://localhost/eco');
 
-app.listen(3000, () => {
-    console.log('Servidor inicializado');
+// mudei a porta de 3000 para 3012 só para não confundir com os outros exercícios:
+let server = app.listen(3012, () => {
+    let port = server.address().port;
+    console.log(`>>>> Servidor inicializado na porta: ${port}`);
 });
+
+app.use ('/pagCliente', pagClienteController);
+//app.use ('/pagAdmin', pagClienteController);
+
+// rotas abaixo utilizadas para teste:
 
 app.get('/hello', (request, response) => {
     console.log("Hello World!!!");
     response.status(200).send('Hello World!!');
 });
 
-
-// app.post('/cliente', (request, response) => {
-//   let cliente = new ClienteSchema(request.body);
-//   console.log("1");
-//   cliente.save((error, resultado) => {
-//     console.log("2");
-//     response.status(201).send(cliente);
-//     console.log("3");
-//   });
-//
-//   });
-
-app.post('/cliente', (req, res) => {
-    let cliente = new ClienteSchema(req.body);
-
-    cliente.save((err, response) => {
-      res.status(200).send(cliente);
-    });
+app.get('/', (request, response) => {
+  console.log(`>>> teste método GET rota: /index - Ok`);
+  response.status(200).send('Teste no método GET rota: /index finalizado com sucesso!')
 });
 
-
-  app.get('/cliente', (request, response) => {
-      ClienteSchema.find((error, clientes) => {
-          if(error) {
-              response.sendStatus(400)
-              return;
-          };
-          response.status(200).send(clientes);
-      });
-  });
-
-
-//app.get('/cliente', (request, response) => {
-  //  ClienteSchema.log("Welcome!!!");
-    //response.status(200).send('xxxxx!!');
+app.post('/', (request, response) => {
+  console.log(`>>> teste método GET rota: /index - Ok`);
+  response.status(200).send(`Teste no método GET rota: /index finalizado com sucesso e o conteúdo digitado no teste foi: ${request.body.texto}`)
+});
