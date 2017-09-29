@@ -9,8 +9,7 @@ const fornecedorSchema = require('../schemas/schFornecedor');
 const adminSchema = require('../schemas/schAdmin');
 
 let router = express.Router()
-const segredo = process.env.appEco_secret;
-router.use(expressJwt({secret: segredo}));
+
 
 // para os testes que precisam de token. Pegar no header do resultado da requisição de login (postman)
 
@@ -88,6 +87,8 @@ router.post ('/cadastroFornecedor', (request, response) => {
 });
 
 router.get ('/buscaFornecedores', (request, response) => {
+  const segredo = process.env.appEco_secret;
+  router.use(expressJwt({secret: segredo}));
   // funcionalidade: recuperar os dados de todos os fornecedores cadastrados.
 
   fornecedorSchema.find( (error, fornecedor) => {
