@@ -1,6 +1,6 @@
 // dependências:
 const express = require('express');
-const clienteSchema = require('../schemas/schCliente');
+const adminSchema = require('../schemas/schAdmin');
 const passwordHash = require('password-hash');
 const jwt = require('jsonwebtoken');
 
@@ -13,20 +13,19 @@ router.post('/', (request, response) => {
      email: request.body.email
    };
 
-  clienteSchema.findOne(query, (error, cliente) => {
+  adminSchema.findOne(query, (error, admin) => {
     // PASSO: trata erro após a consulta ao banco de dados:
     if (error) {
-      //teste: console.log('>>> Erro após a consulta (chamada no método o POST da rota /loginCliente)');
+      //teste: console.log('>>> Erro após a consulta (chamada no método o POST da rota /loginAdmin)');
       response.status(400).send(error);
       return;
     };
 
-    if (cliente && passwordHash.verify(request.body.senha, cliente.senha)) {
+    if (admin && passwordHash.verify(request.body.senha, admin.senha)) {
       // PASSO usuario e senha corretos:
-      const token = jwt.sign({_id: cliente._id}, segredo);
+      const token = jwt.sign({_id: admin._id}, segredo);
       response.set('Authorization', token);
-      // para teste local:
-      response.send(`Usuário ${cliente.email} logado`);
+      response.send(admin);
       return;
     } else {
       // PÀSSO mostrar erro de usuário ou senha:
@@ -35,7 +34,7 @@ router.post('/', (request, response) => {
       return;
     };
   });
-  //teste: console.log('>>> método POST, rota: /loginCliente finalizado com sucesso');
+  //teste: console.log('>>> método POST, rota: /loginAdmin finalizado com sucesso');
 });
 
 module.exports = router;

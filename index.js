@@ -2,6 +2,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+// dependências para interação com front:
 //const handlebars = require ('express-handlebars');
 //app.engine('handlebars', handlebars({defaultLayout: 'main'}));
 //app.set('view engine', 'handlebars');
@@ -12,14 +13,15 @@ const mongoose = require('mongoose');
 //const expressJwt = require('express-jwt');
 
 // schemas (usados nos controllers):
-// const ClienteSchema = require('./schemas/schCliente');
-// const ClienteSchema = require('./schemas/schFornecedor');
-// const ClienteSchema = require('./schemas/schAdmin');
+//const ClienteSchema = require('./schemas/schCliente');
+//const ClienteSchema = require('./schemas/schFornecedor');
+//const ClienteSchema = require('./schemas/schAdmin');
 
 // controllers:
 const pagClienteController = require('./controllers/pagCliente');
 const pagAdminController = require ('./controllers/pagAdmin');
 const pagLoginClienteController = require ('./controllers/loginCliente');
+const pagLoginAdminController = require ('./controllers/loginAdmin');
 
 const app = express();
 
@@ -36,8 +38,9 @@ let server = app.listen(3012, () => {
 app.use ('/pagCliente', pagClienteController);
 app.use ('/pagAdmin', pagAdminController);
 app.use ('/loginCliente', pagLoginClienteController);
-// rotas abaixo utilizadas para teste:
+app.use ('/loginAdmin', pagLoginAdminController);
 
+// rotas abaixo utilizadas para teste:
 app.get('/hello', (request, response) => {
     console.log("Hello World!!!");
     response.status(200).send('Hello World!!');

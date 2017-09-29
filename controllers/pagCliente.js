@@ -2,27 +2,31 @@
 const express = require('express');
 const passwordHash = require('password-hash');
 const bodyParser = require('body-parser');
+const expressJwt = require('express-jwt');
 
 // schemas:
 const clienteSchema = require('../schemas/schCliente');
 
-let router = express.Router();
+let router = express.Router()
 
-router.get ('/', (request, response) => {
+
+router.get ('/dadosCliente/:id', (request, response) => {
+  const segredo = process.env.appEco_secret;
+  router.use(expressJwt({secret: segredo}));
+  // quando colocamos /:qqcoisa, o qqcoisa é uma informação que virá dinamicamente (e a informação vem no request.params.qqcoisa)
   // funcionalidade: recuperar os dados do usuário (e permitir mudança de senha - se der tempo - teria que criar uma rota de alteração de senha).
-  // mostrar os dados do usuário pós-login: ou seja, precisamos do token do cara
-  // neste momento, vou fazer a busca por e-mail, então o e-mail do usuário precisa aparecer no token;
-  // depois que o token for incluido no login, vamos buscar por id: /pagCliente?id=(...)
-  // busca nos testes: /pagCliente?email=millena.ferreira@gmail.com
-  clienteSchema.find( (error, cliente) => {
+  // http://localhost:3012/pagCliente/dadosCliente/parametro
+  // PROXIMO PASSO: cadastro de usuarios ser único, com difentes autorizações para usuários e para admins (em diferentes níveis)
+
+  clienteSchema.findById(request.params.id, (error, cliente) => {
     if (error) {
-      console.log('>>>> método GET, rota: /pagCliente?email via controller - NOK - erro na busca');
+      //teste: console.log('>>>> método GET, rota: /pagCliente/parametro via controller - NOK - erro na busca');
       response.status(401).send(error);
       return;
-    }
+    };
     response.status(200).send(cliente);
   });
-  console.log('>>>> método GET, rota: /pagCliente?email via controller - Ok');
+  //teste: console.log('>>>> método GET, rota: /pagCliente/parametro via controller - Ok');
   //teste: response.status(200).send('Teste método GET rota: /pagCliente finalizado com sucesso');
 });
 
@@ -39,16 +43,16 @@ router.post ('/', (request, response) => {
   clienteNovo.save ( (erro, resultado) => {
     // PASSO: tratar erro de gravação e exibir informações referentes ao erro
     if (erro) {
-      console.log(`>>>> método POST, rota: /pagCliente - NOK, erro = ${erro}`);
+      //teste: console.log(`>>>> método POST, rota: /pagCliente - NOK, erro = ${erro}`);
       response.status(400).send(erro);
     };
-    console.log('>>>> método POST, rota: /pagCliente. Registro incluído com sucesso');
+    //teste: console.log('>>>> método POST, rota: /pagCliente. Registro incluído com sucesso');
     response.status(200).send(resultado);
   });
 
   // PRÓXIMOS PASSOS:
   // enviar um e-mail para o usuário dando as boas vindas à plataforma
-  
+
   //teste: response.status(200).send(`Teste método POST, rota: /pagCliente finalizado com sucesso e o conteúdo do teste foi: ${request.body.texto}`);
 });
 
